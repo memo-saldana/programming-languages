@@ -28,9 +28,28 @@
 (sum '((8 9 5 6 7) (3 4 5 4 2))) ;; 53
 
 ;; === complete? ===
+(define (removeOne graph)
+	(if (null? graph)
+		'()
+		(if (null? (car graph))
+			(cons '() (removeOne (cdr graph)))
+			(cons (cdr (car graph)) (removeOne (cdr graph)))
+		)
+	)
+)
+
+(define (completeHelper graph n)
+	(if (null? graph)
+		#t
+		(if (eq? n (length (car graph)))
+			(complete? (removeOne (cdr graph)))
+			#f
+		)
+	)
+)
 
 (define (complete? graph)
-	(display "Not yet implemented\n")
+	(completeHelper graph (length graph))
 )
 
 (display "=== complete? ===\n")
@@ -39,9 +58,26 @@
 (complete? '( (a c) (b a) (c a))) ;; #f
 
 ;; === msort ===
+(define (mergeHelper x y)
+	(cond
+		[(null? x) y]
+		[(null? y) x]
+		[(< (car x) (car y)) (cons (car x) (mergeHelper (cdr x) y))]
+		[else (cons (car y) (mergeHelper x (cdr y)))]
+	)
+)
 
 (define (msort lst)
-	(display "Not yet implemented\n")
+	(cond
+		[(or (null? lst) (null? (cdr lst))) lst]
+		[(eq? (length lst) 2) (mergeHelper (list (car lst)) (cdr lst))]
+		[else
+			(mergeHelper 
+				(msort (take lst (ceiling (/ (length lst) 2))))
+				(msort (drop lst (ceiling (/ (length lst) 2))))
+		  )
+		]
+	)
 )
 
 (display "=== msort ===\n")
@@ -63,8 +99,19 @@
   )
 )
 
+(define (sumSales id sale)
+	(cond
+		[(null? sale) 0]
+		[(eq? (caar sale) id) (+ (cadar sale) (sumSales id (cdr sale)))]
+		[else (sumSales id (cdr sale))]
+	)
+)
+
 (define (sold-units id sales)
-  	(display "Not yet implemented\n")  	
+	(if (null? sales) 
+		0
+		(+ (sumSales id (cdar sales)) (sold-units id (cdr sales)))
+	)
 )
 
 (display "=== sold-units ===\n")
@@ -76,7 +123,11 @@
 ;; === insert ===
 
 (define (insert x tree)
-	(display "Not yet implemented\n")
+	(cond
+		[(null? tree) (list x '() '())]
+		[(> (car tree) x) (list (car tree) (insert x (cadr tree)) (caddr tree))]
+		[else (list (car tree) (cadr tree) (insert x (caddr tree)))]
+	)
 )
 
 (display "=== insert ===\n")
@@ -85,9 +136,24 @@
 (insert 0 '(1 () (5 (3 () ()) (6 () ())))) ;; '(1 (0 () ()) (5 (3 () ()) (6 () ())))
 
 ;; == set ===
-
+(define (found? x lst)
+	(if (null? lst)
+		#f
+		(if (eq? (car lst) x)
+			#t
+			(found? x (cdr lst))
+		)
+	)
+)
 (define (set lst)
-  	(display "Not yet implemented\n")
+  	(if (null? lst)
+			'()
+			(if (and (number? (car lst)) (not (found? (car lst) (cdr lst)))) ; if it is found, dont add, will add last
+				(cons (car lst) (set (cdr lst)))
+				(set (cdr lst))
+			)
+		)
+		
 )
 
 (display "=== set ===\n")
@@ -96,7 +162,11 @@
 (set '(10 (a b 3) 4 (8) c d (a b 3) d c 11)) ;; '(10 4 11)
 
 (define (union x y)
-  	(display "Not yet implemented\n")
+  	(cond
+			[(null? y) (set x)] ; if none remain, return x with all unique values
+			[(or (found? (car y) x) (not (number? (car y)))) (union x (cdr y))]
+			[else (union (cons (car y) x) (cdr y))]
+		)
 )
 
 (display "=== union ===\n")
@@ -104,8 +174,24 @@
 (union '(10 2 8 4) '()) ;; '(10 2 8 4)
 (union '(2 a 8 4) '(b c d)) ;; '(2 8 4)
 
+(define (searchIntersection n lst)
+	(if (null? lst)
+		#f
+		(if (eq? n (car lst))
+			#t
+			(searchIntersection n (cdr lst))
+		)
+	)
+)
+
 (define (intersection x y)
-  	(display "Not yet implemented\n")
+  	(if (null? x)
+			'()
+			(if (searchIntersection (car x) y)
+				(cons (car x) (intersection (cdr x) y))
+				(intersection (cdr x) y)
+			)
+		)
 )
 
 (display "=== intersection ===\n")
