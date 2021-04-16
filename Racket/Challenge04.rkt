@@ -11,9 +11,16 @@
 ;; There is a series of test cases for each function. In order to state that your function "works as described", your output must be similar to the expected one in each case.
 
 ;; === prime? ===
+(define (primeHelper n div)
+	(cond 
+		[(< n (* div div)) #t]
+		[(equal? 0 (modulo n div)) #f]
+		[else (primeHelper n (+ div 1))]
+	)
+)
 
 (define (prime? n)
-	(display "Not yet implemented\n")
+	(primeHelper n 2)
 )
 
 (display "=== prime? ===\n")
@@ -24,7 +31,10 @@
 ;; === sumDigits ===
 
 (define (sumDigits n)
-  	(display "Not yet implemented\n")
+	(if (<= (quotient n 10) 0)
+		n
+		(+ (remainder n 10) (sumDigits (quotient n 10)))
+	)
 )
 
 (display "=== sumDigits ===\n")
@@ -36,7 +46,13 @@
 ;; === xor ===
 
 (define (xor lstA lstB)
-	(display "Not yet implemented\n")
+	(if (null? lstA)
+		'()
+		(cond
+			[(and (car lstA) (car lstB)) (cons #f (xor (cdr lstA) (cdr lstB)))]
+			[else (cons (or (car lstA) (car lstB)) (xor (cdr lstA) (cdr lstB)))]
+		)
+	)
 )
 
 (display "=== xor ===\n")
@@ -47,7 +63,10 @@
 ;; === listToNumber ===
 
 (define (listToNumber lst)
-	(display "Not yet implemented\n")
+	(if (null? lst)
+		0
+		(+ (* (car lst) (expt 10 (- (length lst) 1))) (listToNumber (cdr lst)))
+	)
 )
 
 (display "=== listToNumber ===\n")

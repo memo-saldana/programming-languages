@@ -1,0 +1,9 @@
+1. Output for "abcde" is 1
+2. Output for "abc" is 0
+3. Output for 1 2 [3, 4, 5] is [1, 3, 4, 5, 2]
+4. Output for [1.1, 2.2] 3.3 is [[3.3], [1.1, 2.2]]
+5. Output for [1.1, 2.2] 3.3 is [1.1, 2.2, 3.3]
+6. Output for 0 0 1 is 'x'
+7. Output for 10 is 0
+8. Output for "12345" is "xxx"
+9. Output for "123456" is "xxxy"
