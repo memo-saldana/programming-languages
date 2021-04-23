@@ -33,19 +33,40 @@ maskedSum nums mask = foldl1 (+) (map fst (filter (\x -> snd x) (zip nums mask))
 -- === combine ===
 
 combine :: [[t]] -> [[a]] -> [[(t, a)]]
-combine _ _  = error "Not yet implemented\n"
+combine mA mB  =  zipWith (\x y -> zipWith (\a b -> (a,b)) x y) mA mB
 
 -- === avgHeight ===
 
 avgHeight :: [(String, Double)] -> ((String, Double), (String, Double))
-avgHeight _ = error "Not yet implemented\n"
+avgHeight lst = (
+        ("Male", 
+            sum(
+                (map snd (filter (\(gender, n) -> gender == "Male") lst))
+            ) / fromIntegral(length (filter (\(gender, n) -> gender == "Male") lst)) 
+        ),
+        ("Female",
+            sum(
+                (map snd (filter (\(gender, n) -> gender == "Female") lst))
+            ) / fromIntegral(length (filter (\(gender, n) -> gender == "Female") lst)) 
+        )
+    )
 
 -- === maxHeight ===
 
 data Record = Record [Char] Double deriving Show
 
 maxHeight :: [Record] -> (Record, Record)
-maxHeight _ = error "Not yet implemented\n"
+maxHeight lst = (
+        (foldl1 
+            (\(Record gX hX) (Record gY hY) -> if hX > hY then (Record gX hX) else (Record gY hY)) 
+            (filter (\(Record gender _) -> gender == "Male") lst)
+        ),
+        (foldl1 
+            (\(Record gX hX) (Record gY hY) -> if hX > hY then (Record gX hX) else (Record gY hY)) 
+            (filter (\(Record gender _) -> gender == "Female") lst)
+        )
+        
+    )
 
 -- === Test cases ===
 
