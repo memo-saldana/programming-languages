@@ -54,10 +54,17 @@ intersection (Set x) (Set y) = set ([zi | zi <- x, elem zi y])
 -- === mSort ===
 
 merge :: [Int] -> [Int] -> [Int]
-merge _ _ = error "Not yet implemented\n"
+merge [] [] = []
+merge a [] = a
+merge [] b = b
+merge (hA: tA) (hB: tB) = if hA > hB
+    then hB : (merge (hA:tA) tB)
+    else hA : (merge tA (hB:tB))
 
 mSort :: [Int] -> [Int]
-mSort _ = error "Not yet implemented\n"
+mSort [] = []
+mSort [a] = [a]
+mSort lst = (merge (mSort (take (div (length lst) 2) lst)) (mSort (drop (div (length lst) 2) lst)))
 
 -- === Test cases ===
 
